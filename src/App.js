@@ -43,18 +43,7 @@ function App() {
     setTodos(newTodos)
   }
   return (
-    <>
-    
-      <Routes>
-       
-          
-          <Route path="/article" element={<Article />} />         
-        
-      </Routes>
-    
-    <Link to="/article">Artikkeli</Link>
-
-    <Outlet />
+    <>        
     
     <TodoList todos ={todos} toggleTodo={toggleTodo} />
     <input ref={todoNameRef} type="text" />

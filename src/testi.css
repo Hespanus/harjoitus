@@ -1,0 +1,14 @@
+.links{
+    margin: 20px;
+    background-color: burlywood;
+    padding: 10px;
+}
+.navbar {
+    margin-bottom: 20px;
+}
+
+.singleTodo {
+    padding: 20px;
+    border: 2px solid black;
+    margin-bottom: 5px;
+}
