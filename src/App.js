@@ -31,11 +31,17 @@ function App() {
     
   function handleAddtodo(e) {
     const name = todoNameRef.current.value
+    let descr = 'Jotain'
     if (name === '') return
     setTodos(x => {
-      return [...x, {id: uuidv4(), name: name, complete: false}]
+      return [...x, {id: uuidv4(), name: name, description: descr, complete: false}]
     })
     todoNameRef.current.value = null
+  }
+
+  function deleteTodo(name) {
+    const newTodos = todos.filter(todo => todo.name !== name)
+    setTodos(newTodos)
   }
 
   function handleClearTodos() {
@@ -45,7 +51,7 @@ function App() {
   return (
     <>        
     
-    <TodoList todos ={todos} toggleTodo={toggleTodo} />
+    <TodoList todos ={todos} toggleTodo={toggleTodo} deleteTodo={deleteTodo} />
     <input ref={todoNameRef} type="text" />
     <button onClick={handleAddtodo}>Add Todo</button>
     <button onClick={handleClearTodos}>Clear completed Todos</button>
