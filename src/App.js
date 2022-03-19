@@ -1,9 +1,8 @@
 import React, {useState, useRef, useEffect} from "react";
-import TodoList from "./TodoList";
-import { v4 as uuidv4 } from 'uuid'
-import { Routes, Route } from "react-router-dom";
-import { Outlet, Link } from "react-router-dom";
-import Article from "./Article";
+import Todo from './Todo';
+import { v4 as uuidv4 } from 'uuid';
+
+
 
 const STORAGE_KEY = 'todoApp.todos'
 
@@ -49,15 +48,19 @@ function App() {
     setTodos(newTodos)
   }
   return (
-    <>        
+   
+    <>
+    { todos.map(todo => {
+      return <Todo key={todo.id} toggleTodo={toggleTodo} todo={todo} deleteTodo={deleteTodo} />
+    })  }
     
-    <TodoList todos ={todos} toggleTodo={toggleTodo} deleteTodo={deleteTodo} />
+    
     <input ref={todoNameRef} type="text" />
     <button onClick={handleAddtodo}>Add Todo</button>
     <button onClick={handleClearTodos}>Clear completed Todos</button>
     <div>{todos.filter(todo => !todo.complete).length}left to do</div>
-    </>
     
+    </>
   )
 }
 
