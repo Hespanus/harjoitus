@@ -1,12 +1,15 @@
 import React from 'react'
 
 export default function todo({todo, toggleTodo, deleteTodo}) {
+
+  const {name, id, description} = todo  
+
   function handleTodoClick() {
-    toggleTodo(todo.id)
+    toggleTodo(id)
   }
   
   function handleDelClick() {
-    deleteTodo(todo.name)
+    deleteTodo(name)
   }
 
   return (
@@ -14,12 +17,12 @@ export default function todo({todo, toggleTodo, deleteTodo}) {
       <div className='singleTodo'>
         <div className='todoTitles'>
           <h3 style={{margin: "5px"}}>Tehtävä</h3>
-          <h4>{todo.name}</h4>
+          <h4>{name}</h4>
           
         </div>
-        <div className='todoTitles'>
+        <div className='todoTitles' style={{ width: "200px"}}>
           <h3 style={{margin: "5px"}}>Kuvaus</h3>
-          <h4>{todo.description}</h4>
+          <h4>{description}</h4>
           
         </div>
         <div className='todoTitles'>
