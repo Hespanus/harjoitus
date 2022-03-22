@@ -1,8 +1,8 @@
 import React from 'react'
 
-export default function todo({todo, toggleTodo, deleteTodo}) {
+export default function todo({todo, toggleTodo, deleteTodo, setSubOf}) {
 
-  const {name, id, description} = todo  
+  const {name, id, description, subOf} = todo  
 
   function handleTodoClick() {
     toggleTodo(id)
@@ -11,12 +11,17 @@ export default function todo({todo, toggleTodo, deleteTodo}) {
   function handleDelClick() {
     deleteTodo(name)
   }
+  function handleAddSubTodo(){
+    setSubOf(name)
+  }
 
   return (
-    <div>
+    
       <div className='singleTodo'>
-        <div className='todoTitles'>
-          <h3 style={{margin: "5px"}}>Tehtävä</h3>
+        <div className='todoTitles'>          
+          {subOf === '' 
+        ? <h3 style={{margin: "5px"}}>Tehtävä</h3>
+        : <h3 style={{margin: "5px"}}> Tehtävä (Ylä: {subOf})</h3>}
           <h4>{name}</h4>
           
         </div>
@@ -32,12 +37,15 @@ export default function todo({todo, toggleTodo, deleteTodo}) {
         </div>
         <div className='todoTitles'>
           <h3 style={{margin: "5px"}}>Poista</h3>
+          <h4><button onClick={handleAddSubTodo} style={{color: "red", padding: "6px"}}>Lisää alatehtävä</button></h4>
+        </div>
+        <div className='todoTitles'>
+          <h3 style={{margin: "5px"}}>Poista</h3>
           <h4><button onClick={handleDelClick} style={{color: "red", padding: "6px"}}>Poista </button></h4>
         </div>
        
       </div>
       
-      
-    </div>
+   
   )
 }
