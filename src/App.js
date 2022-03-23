@@ -59,13 +59,13 @@ function App() {
    
     <>
     { todos.map(todo => {
-      return <Todo key={todo.id} toggleTodo={toggleTodo} todo={todo} deleteTodo={deleteTodo} setSubOf={handleSetSubOf} />
+      return <Todo key={todo.id} toggleTodo={toggleTodo} todo={todo} todos={todos} deleteTodo={deleteTodo} setSubOf={handleSetSubOf} />
     })  }
     
     <div className="todoCreate">
       {sub === '' 
         ? <h3>Lisää uusi tehtävä</h3>
-        : <h3>Lisää uusi alatehtävä tehtävälle {sub}</h3>}
+        : <h3>Lisää uusi alatehtävä tehtävälle: {sub}</h3>}
       <input ref={todoNameRef} type="text" />
       <textarea ref={descriptionRef} type="text"></textarea>
       <button onClick={handleAddtodo}>Lisää</button>    

@@ -9,8 +9,8 @@
 
 .singleTodo {
     display: flex;
-    justify-content: space-around;
-    padding: 5px;    
+    flex-direction: column;
+    padding: 3px;    
     border: 2px solid black;
     margin-bottom: 5px;
     background-color: cadetblue;
@@ -20,7 +20,7 @@
 .todoTitles {
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    
     align-items: center;
     
     
@@ -41,4 +41,15 @@
     margin: 5px;
     padding: 10px;
     
+}
+.subTitles {
+    display: flex;
+    justify-content: space-around;
+}
+.mainTitle {
+    background-color: aquamarine;
+    border: 1px solid black;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
 }
