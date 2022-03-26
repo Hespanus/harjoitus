@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function todo({todo, todos, toggleTodo, deleteTodo, setSubOf}) {
+export default function todo({todo, todos, toggleTodo, deleteTodo, setSubOf, setShowSub}) {
 
   const {name, id, description, subOf} = todo  
   const subTodos = todos.filter(x => x.subOf === name);
@@ -14,6 +14,10 @@ export default function todo({todo, todos, toggleTodo, deleteTodo, setSubOf}) {
   }
   function handleAddSubTodo(){
     setSubOf(name)
+  }
+
+  function handleShowSubTodos() {
+    setShowSub(name)
   }
 
   return (
@@ -40,11 +44,12 @@ export default function todo({todo, todos, toggleTodo, deleteTodo, setSubOf}) {
             
           </div>
           <div className='todoTitles'>
-            <h3 style={{margin: "5px"}}>Alatehtävät 
-            <button onClick={handleAddSubTodo} style={{color: "red", padding: "6px", margin: "7px"}}>Lisää</button></h3>
+            <h3 style={{margin: "5px"}}>Alatehtävät <button onClick={handleShowSubTodos} style={{color: "red", padding: "6px", margin: "7px"}}>Näytä</button> 
+            </h3>
             {subTodos.map(x => {
               return <h4 key={x.id}>{x.name}</h4>
             })}
+            <button onClick={handleAddSubTodo} style={{color: "red", padding: "6px", margin: "7px"}}>Lisää</button>
             
           </div>
           <div className='todoTitles'>

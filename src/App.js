@@ -8,21 +8,33 @@ const STORAGE_KEY = 'todoApp.todos'
 
 
 function App() {
-  const [sub, setSubof] = useState('')
+  const [subOf, setSubof] = useState('')
   const [todos, setTodos] = useState([])
+  const [todoShow, setTodoShow] = useState([]) 
+  const [subOfShow, setSubofShow] = useState('')
   const todoNameRef = useRef()
   const descriptionRef = useRef()
 
   useEffect(() => {
     const storedTodos = JSON.parse(localStorage.getItem(STORAGE_KEY))
-    if (storedTodos) 
-    setTodos(storedTodos)
+    if (storedTodos) {
+      setTodos(storedTodos)
+      const newTodos = storedTodos.filter(todo => todo.subOf === '')
+      setTodoShow(newTodos)
+    }    
   }, [])
   
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(todos))
+    
   }, [todos])
+
+  useEffect(() => {    
+    console.log(subOfShow)
+    const tempTodos = todos.filter(todo => todo.subOf === subOfShow)
+    setTodoShow(tempTodos)
+  }, [subOfShow, todos])
 
   function toggleTodo(id) {
     const newTodos = [...todos]
@@ -42,10 +54,11 @@ function App() {
     const descr = descriptionRef.current.value
     if (name === '') return
     setTodos(x => {
-      return [...x, {id: uuidv4(), name: name, description: descr, complete: false, subOf: sub }]
+      return [...x, {id: uuidv4(), name: name, description: descr, complete: false, subOf: subOf }]
     })
     todoNameRef.current.value = null
     descriptionRef.current.value = null
+    
     setSubof('')
   }
 
@@ -54,25 +67,28 @@ function App() {
     setTodos(newTodos)
   }
   
+  function handleShowSub (subOfx) {
+    setSubofShow(subOfx)
+  }
   
   return (
    
     <>
-    { todos.map(todo => {
-      return <Todo key={todo.id} toggleTodo={toggleTodo} todo={todo} todos={todos} deleteTodo={deleteTodo} setSubOf={handleSetSubOf} />
+    { todoShow.map(todo => {
+      return <Todo key={todo.id} toggleTodo={toggleTodo} todo={todo} todos={todos}
+       deleteTodo={deleteTodo} setSubOf={handleSetSubOf} setShowSub={handleShowSub} />
     })  }
     
     <div className="todoCreate">
-      {sub === '' 
+      {subOf === '' 
         ? <h3>Lisää uusi tehtävä</h3>
-        : <h3>Lisää uusi alatehtävä tehtävälle: {sub}</h3>}
+        : <h3>Lisää uusi alatehtävä tehtävälle: {subOf}</h3>}
       <input ref={todoNameRef} type="text" />
       <textarea ref={descriptionRef} type="text"></textarea>
       <button onClick={handleAddtodo}>Lisää</button>    
       <div>{todos.filter(todo => !todo.complete).length}left to do</div>
 
-    </div>
-    
+    </div>    
     
     </>
   )
