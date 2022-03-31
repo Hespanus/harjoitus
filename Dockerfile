@@ -1,9 +1,12 @@
-FROM node:alpine
+FROM node:bullseye as build-stage
 WORKDIR /app
-ENV PATH /app/node_modules/.bin:$PATH
-COPY package.json ./
-COPY package-lock.json ./
-RUN  npm install
-COPY . ./
-EXPOSE 3000
-CMD ["npm", "start"]
+COPY package*.json /app/
+RUN npm install
+COPY ./ /app/
+RUN npm run build
+
+FROM nginx:1.21.6
+WORKDIR /usr/share/nginx/html
+RUN rm -rf ./*
+COPY --from=build-stage /app/build/ .
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
