@@ -1,10 +1,13 @@
 import React, {useState, useRef, useEffect} from "react";
 import Todo from './Todo';
 import { v4 as uuidv4 } from 'uuid';
+import Axios from "axios";
 
 
 
 const STORAGE_KEY = 'todoApp.todos'
+
+const apiUrl = `http://localhost:8080`;
 
 
 function App() {
@@ -15,23 +18,22 @@ function App() {
   const todoNameRef = useRef()
   const descriptionRef = useRef()
 
-  useEffect(() => {
-    const storedTodos = JSON.parse(localStorage.getItem(STORAGE_KEY))
+  useEffect(async() => {
+    const tempTodos = []
+    tempTodos.push(await Axios.get(apiUrl + '/todos'))
+    const storedTodos = [...tempTodos]
     if (storedTodos) {
       setTodos(storedTodos)
       const newTodos = storedTodos.filter(todo => todo.subOf === '')
       setTodoShow(newTodos)
-    }    
+    }
   }, [])
   
 
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(todos))
-    
-  }, [todos])
+
 
   useEffect(() => {    
-    console.log(subOfShow)
+
     const tempTodos = todos.filter(todo => todo.subOf === subOfShow)
     setTodoShow(tempTodos)
   }, [subOfShow, todos])
@@ -48,14 +50,20 @@ function App() {
      
   }
     
-  function handleAddtodo() {
+  function handleAddTodo() {
     
     const name = todoNameRef.current.value
     const descr = descriptionRef.current.value
     if (name === '') return
-    setTodos(x => {
-      return [...x, {id: uuidv4(), name: name, description: descr, complete: false, subOf: subOf }]
-    })
+
+      Axios.post(apiUrl + "/todo-create",
+          {id: uuidv4(), name: name, description: descr, complete: false, subOf: subOf })
+          .then(setTodos(x => {
+            return [...x, {id: uuidv4(), name: name, description: descr, complete: false, subOf: subOf }]
+          }))
+
+
+
     todoNameRef.current.value = null
     descriptionRef.current.value = null
     
@@ -85,7 +93,7 @@ function App() {
         : <h3>Lisää uusi alatehtävä tehtävälle: {subOf}</h3>}
       <input ref={todoNameRef} type="text" />
       <textarea ref={descriptionRef} type="text"></textarea>
-      <button onClick={handleAddtodo}>Lisää</button>    
+      <button onClick={handleAddTodo}>Lisää</button>
       <div>{todos.filter(todo => !todo.complete).length}left to do</div>
 
     </div>    
