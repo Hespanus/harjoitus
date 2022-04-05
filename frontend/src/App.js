@@ -11,21 +11,42 @@ const apiUrl = `http://localhost:8080`;
 
 
 function App() {
-  const [subOf, setSubof] = useState('')
+  const [subOf, setSubof] = useState(" ")
   const [todos, setTodos] = useState([])
   const [todoShow, setTodoShow] = useState([]) 
-  const [subOfShow, setSubofShow] = useState('')
+  const [subOfShow, setSubofShow] = useState(' ')
   const todoNameRef = useRef()
   const descriptionRef = useRef()
 
   useEffect(async() => {
-    const tempTodos = []
-    tempTodos.push(await Axios.get(apiUrl + '/todos'))
-    const storedTodos = [...tempTodos]
+    let storedTodos = []
+    await Axios.get(apiUrl + '/todos')
+        .then(resp => {
+          for (let x of resp.data){
+            if (x.id){
+              let tempTodo = {}
+              tempTodo['name'] = x.name
+              tempTodo['id'] = x.id
+              tempTodo['description'] = x.description
+              tempTodo['complete'] = x.complete
+              tempTodo['subof'] = x.subof
+
+
+              storedTodos.push(tempTodo)
+            }
+
+          }
+
+
+        })
     if (storedTodos) {
+      console.log(storedTodos)
       setTodos(storedTodos)
-      const newTodos = storedTodos.filter(todo => todo.subOf === '')
+
+      const newTodos = storedTodos.filter(todo => todo.subOf === ' ')
+      console.log(newTodos)
       setTodoShow(newTodos)
+
     }
   }, [])
   
@@ -50,8 +71,8 @@ function App() {
      
   }
     
-  function handleAddTodo() {
-    
+  function handleAddTodo()  {
+
     const name = todoNameRef.current.value
     const descr = descriptionRef.current.value
     if (name === '') return
@@ -67,7 +88,7 @@ function App() {
     todoNameRef.current.value = null
     descriptionRef.current.value = null
     
-    setSubof('')
+    setSubof(' ')
   }
 
   function deleteTodo(name) {
@@ -88,7 +109,7 @@ function App() {
     })  }
     
     <div className="todoCreate">
-      {subOf === '' 
+      {subOf === ' '
         ? <h3>Lisää uusi tehtävä</h3>
         : <h3>Lisää uusi alatehtävä tehtävälle: {subOf}</h3>}
       <input ref={todoNameRef} type="text" />

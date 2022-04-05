@@ -1,24 +1,27 @@
-import express from "express"
-import connectDb from "./connection.js"
-import Todo from "./Todo.model.js";
-import * as cors from "cors";
-import mongoose from "mongoose";
-
+const express = require('express');
 const app = express()
+const connectDb = require("./connection")
+const Todo = require("./Todo.model.js")
+const cors = require('cors')
 
 
-const allowedOrigins = ['http://localhost:3000'];
+const PORT = 8080;
 
-const options: cors.CorsOptions = {
-    origin: allowedOrigins
-};
+app.listen(PORT, function() {
+    console.log(`Listening on ${PORT}`);
+
+    connectDb().then(() => {
+        console.log("MongoDb connected");
+    });
+});
 
 
-app.use(cors(options))
+
+app.use(cors())
 app.use(express.json())
 
 //app.use("/api/")
-const PORT = 8080;
+
 
 app.get("/todos", async (req, res) => {
     const todos = await Todo.find();
