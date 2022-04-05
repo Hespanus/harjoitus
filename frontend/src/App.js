@@ -7,7 +7,7 @@ import Axios from "axios";
 
 
 
-const apiUrl = `http://backend:8080`;
+const apiUrl = `http://localhost:8080`;
 
 
 function App() {
