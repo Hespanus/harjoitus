@@ -34,14 +34,35 @@ app.post("/todo-create", async (req, res) => {
     console.log(req.body)
     const todo = new Todo(req.body);
 
-    await todo.save().then(() => console.log("Todo created"));
+    const todoSaved = await todo.save().then(() => {return todo});
 
-    res.send("Todo created \n");
+    res.send(todoSaved);
 });
 
-app.get("/todo-delete", async (req, res) => {
-    const body = req.body
-    Todo.deleteOne(body.id)
-    const todos = await Todo.find();
-    res.json(todos);
+app.post("/todo-delete", async (req, res) => {
+
+
+    Todo.deleteOne({id: req.body.id}, function(err, result) {
+        if (err) {
+            res.send(err);
+        } else {
+            res.send(result);
+        }
+    });
+
+
+});
+
+app.post("/todo-update", async (req, res) => {
+
+
+    Todo.updateOne({id:req.body.id}, {complete: req.body.complete},  function (err, docs) {
+        if (err) {
+            res.send(err);
+        } else {
+            res.send(docs);
+        }
+    });
+
+
 });

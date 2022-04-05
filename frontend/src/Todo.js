@@ -2,15 +2,16 @@ import React from 'react'
 
 export default function todo({todo, todos, toggleTodo, deleteTodo, setSubOf, setShowSub}) {
 
-  const {name, id, description, subOf} = todo  
-  const subTodos = todos.filter(x => x.subOf === name);
+  const {name, id, description, subof} = todo
+  const subTodos = todos.filter(x => x.subof === name);
 
   function handleTodoClick() {
     toggleTodo(id)
   }
   
   function handleDelClick() {
-    deleteTodo(name)
+    deleteTodo(id)
+
   }
   function handleAddSubTodo(){
     setSubOf(name)
@@ -24,9 +25,9 @@ export default function todo({todo, todos, toggleTodo, deleteTodo, setSubOf, set
     
       <div className='singleTodo'>   
       <div className='mainTitle'>          
-          {subOf === '' 
+          {subof === ''
         ? <h3 style={{margin: "5px"}}>{name}</h3>
-        : <h3 style={{margin: "5px"}}> {name} (Ylä: {subOf})</h3>}
+        : <h3 style={{margin: "5px"}}> {name} (Ylä: {subof})</h3>}
           
           
         </div>     

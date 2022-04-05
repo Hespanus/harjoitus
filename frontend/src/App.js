@@ -5,16 +5,16 @@ import Axios from "axios";
 
 
 
-const STORAGE_KEY = 'todoApp.todos'
 
-const apiUrl = `http://localhost:8080`;
+
+const apiUrl = `http://backend:8080`;
 
 
 function App() {
-  const [subOf, setSubof] = useState(" ")
+  const [subof, setSubof] = useState("")
   const [todos, setTodos] = useState([])
   const [todoShow, setTodoShow] = useState([]) 
-  const [subOfShow, setSubofShow] = useState(' ')
+  const [subOfShow, setSubofShow] = useState('')
   const todoNameRef = useRef()
   const descriptionRef = useRef()
 
@@ -34,16 +34,13 @@ function App() {
 
               storedTodos.push(tempTodo)
             }
-
           }
-
-
         })
     if (storedTodos) {
       console.log(storedTodos)
       setTodos(storedTodos)
 
-      const newTodos = storedTodos.filter(todo => todo.subOf === ' ')
+      const newTodos = storedTodos.filter(todo => todo.subof === '')
       console.log(newTodos)
       setTodoShow(newTodos)
 
@@ -55,19 +52,32 @@ function App() {
 
   useEffect(() => {    
 
-    const tempTodos = todos.filter(todo => todo.subOf === subOfShow)
+    const tempTodos = todos.filter(todo => todo.subof === subOfShow)
     setTodoShow(tempTodos)
   }, [subOfShow, todos])
 
   function toggleTodo(id) {
     const newTodos = [...todos]
     const todo = newTodos.find(todo => todo.id === id)
-    todo.complete = !todo.complete
-    setTodos(newTodos)
+    let complete = !todo.complete
+    Axios.post(apiUrl + `/todo-update`,
+        {id:id, complete: complete})
+        .then(res => {
+          console.log(res)
+          if(res.data.modifiedCount > 0){
+            todo.complete = !todo.complete
+            setTodos(newTodos)
+          }
+        })
+        .catch(error => {
+          console.error("Error!", error)
+        })
+
+
   }
 
-  function handleSetSubOf(subOf) {
-    setSubof(subOf)
+  function handleSetSubOf(subof) {
+    setSubof(subof)
      
   }
     
@@ -76,24 +86,52 @@ function App() {
     const name = todoNameRef.current.value
     const descr = descriptionRef.current.value
     if (name === '') return
-
       Axios.post(apiUrl + "/todo-create",
-          {id: uuidv4(), name: name, description: descr, complete: false, subOf: subOf })
-          .then(setTodos(x => {
-            return [...x, {id: uuidv4(), name: name, description: descr, complete: false, subOf: subOf }]
-          }))
+            {id: uuidv4(), name: name, description: descr, complete: false, subof: subof}
+          )
+          .then(res => {
+            let resp = res.data
+            let tempTodo = {}
+            tempTodo['name'] = resp.name
+            tempTodo['id'] = resp.id
+            tempTodo['description'] = resp.description
+            tempTodo['complete'] = resp.complete
+            tempTodo['subof'] = resp.subof
+
+            let temptodos = [...todos];
+            temptodos.push(tempTodo);
+
+            setTodos(temptodos);
+
+          })
+          .catch(error =>{
+            console.error("Error!", error);
+          })
+
 
 
 
     todoNameRef.current.value = null
     descriptionRef.current.value = null
     
-    setSubof(' ')
+    setSubof('')
   }
 
-  function deleteTodo(name) {
-    const newTodos = todos.filter(todo => todo.name !== name)
-    setTodos(newTodos)
+  function deleteTodo(id) {
+    Axios.post(apiUrl + `/todo-delete`,
+        {id:id})
+        .then(res => {
+          console.log(res)
+          if(res.data.deletedCount > 0){
+            const newTodos = todos.filter(todo => todo.id !== id)
+            setTodos(newTodos)
+          }
+        })
+        .catch(error => {
+          console.error("Error!", error)
+        })
+
+
   }
   
   function handleShowSub (subOfx) {
@@ -101,7 +139,7 @@ function App() {
   }
   
   return (
-   
+
     <>
     { todoShow.map(todo => {
       return <Todo key={todo.id} toggleTodo={toggleTodo} todo={todo} todos={todos}
@@ -109,13 +147,13 @@ function App() {
     })  }
     
     <div className="todoCreate">
-      {subOf === ' '
+      {subof === ''
         ? <h3>Lisää uusi tehtävä</h3>
-        : <h3>Lisää uusi alatehtävä tehtävälle: {subOf}</h3>}
+        : <h3>Lisää uusi alatehtävä tehtävälle: {subof}</h3>}
       <input ref={todoNameRef} type="text" />
       <textarea ref={descriptionRef} type="text"></textarea>
       <button onClick={handleAddTodo}>Lisää</button>
-      <div>{todos.filter(todo => !todo.complete).length}left to do</div>
+
 
     </div>    
     
