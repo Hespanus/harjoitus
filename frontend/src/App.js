@@ -20,22 +20,26 @@ function App() {
 
   useEffect(async() => {
     let storedTodos = []
-    await Axios.get(apiUrl + '/todos')
-        .then(resp => {
-          for (let x of resp.data){
-            if (x.id){
-              let tempTodo = {}
-              tempTodo['name'] = x.name
-              tempTodo['id'] = x.id
-              tempTodo['description'] = x.description
-              tempTodo['complete'] = x.complete
-              tempTodo['subof'] = x.subof
+    try {
+      const resp = await Axios.get(apiUrl + '/todos');
+      for (let x of resp.data){
+        if (x.id){
+          let tempTodo = {}
+          tempTodo['name'] = x.name
+          tempTodo['id'] = x.id
+          tempTodo['description'] = x.description
+          tempTodo['complete'] = x.complete
+          tempTodo['subof'] = x.subof
 
 
-              storedTodos.push(tempTodo)
-            }
-          }
-        })
+          storedTodos.push(tempTodo)
+        }
+      }
+    } catch (err) {
+      console.error(err);
+    }
+
+
     if (storedTodos) {
       console.log(storedTodos)
       setTodos(storedTodos)
