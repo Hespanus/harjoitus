@@ -4,6 +4,9 @@ const connectDb = require("./connection")
 const Todo = require("./Todo.model.js")
 const cors = require('cors')
 
+app.use(cors())
+app.use(express.json())
+app.options('*', cors());
 
 const PORT = 8080;
 
@@ -17,8 +20,7 @@ app.listen(PORT, function() {
 
 
 
-app.use(cors())
-app.use(express.json())
+
 
 //app.use("/api/")
 
