@@ -18,26 +18,29 @@ function App() {
   const todoNameRef = useRef()
   const descriptionRef = useRef()
 
-  useEffect(async() => {
+  useEffect(() => {
     let storedTodos = []
-    try {
-      const resp = await Axios.get(apiUrl + '/todos');
-      for (let x of resp.data){
-        if (x.id){
-          let tempTodo = {}
-          tempTodo['name'] = x.name
-          tempTodo['id'] = x.id
-          tempTodo['description'] = x.description
-          tempTodo['complete'] = x.complete
-          tempTodo['subof'] = x.subof
-
-
-          storedTodos.push(tempTodo)
+    async function fetch(){
+      try {
+        const resp = await Axios.get(apiUrl + '/todos');
+        for (let x of resp.data){
+          if (x.id){
+            let tempTodo = {}
+            tempTodo['name'] = x.name
+            tempTodo['id'] = x.id
+            tempTodo['description'] = x.description
+            tempTodo['complete'] = x.complete
+            tempTodo['subof'] = x.subof
+  
+  
+            storedTodos.push(tempTodo)
+          }
         }
+      } catch (err) {
+        console.error(err);
       }
-    } catch (err) {
-      console.error(err);
     }
+    fetch()
 
 
     if (storedTodos) {
