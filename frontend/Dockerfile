@@ -1,7 +1,7 @@
 FROM node:bullseye as build-stage
 WORKDIR /app
 COPY package*.json /app/
-RUN npm ci
+RUN npm install
 COPY ./ /app/
 RUN npm run build
 
