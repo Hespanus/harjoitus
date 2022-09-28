@@ -1,4 +1,4 @@
-FROM node:16-bullseye as build-stage
+FROM node:bullseye as build-stage
 WORKDIR /app
 COPY package*.json /app/
 RUN npm ci
