@@ -18,6 +18,14 @@ pipeline {
                 echo 'Login Completed'      
             }           
         }   
+        stage('Push to Docker Hub') {      	
+            steps{                       	
+                sh 'docker push heikkitanhi/harjoitus_frontend'
+                sh 'docker push heikkitanhi/harjoitus_backend'                		
+                echo 'Push completed'
+                sh 'docker logout'      
+            }           
+        }   
         
         stage('Deploy') {
             steps {
