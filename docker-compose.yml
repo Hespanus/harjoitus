@@ -2,12 +2,14 @@ version: '3.8'
 services:
   frontend:
     build: ./frontend
+    image: heikkitanhi/harjoitus_frontend
     ports:
       - '80:80'
     depends_on:
       - backend
   backend:
     build: ./backend
+    image: heikkitanhi/harjoitus_backend
     ports:
       - '8080:8080'
     depends_on:
