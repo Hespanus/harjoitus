@@ -7,7 +7,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'docker system prune -a -f'
+                
                 echo 'Building..'
                 sh 'docker-compose build'
             }
@@ -36,7 +36,7 @@ pipeline {
         
         stage('rabbit message') {
             steps {
-                rabbitMQPublisher conversion: false, data: 'testi', exchange: '', rabbitName: 'rabbitmq', routingKey: ''
+                rabbitMQPublisher conversion: false, data: 'testi', exchange: '', rabbitName: 'rabbitmq', routingKey: 'kaniini'
             }
         }
 
