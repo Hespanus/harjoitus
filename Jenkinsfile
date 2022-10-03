@@ -36,7 +36,7 @@ pipeline {
         
         stage('rabbit message') {
             steps {
-                rabbitMQPublisher conversion: false, data: 'testi', exchange: 'kaniini', rabbitName: 'rabbitmq', routingKey: ''
+                rabbitMQPublisher conversion: false, data: 'testi', exchange: '', rabbitName: 'rabbitmq', routingKey: ''
             }
         }
 
