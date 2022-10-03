@@ -33,6 +33,15 @@ pipeline {
                 sh 'docker-compose down'
             }
         }
+        
+        stage('rabbit message') {
+            steps {
+                rabbitMQPublisher conversion: false, data: 'testi', exchange: 'kaniini', rabbitName: 'rabbitmq', routingKey: ''
+            }
+        }
+
+
+
     }
 
 }
