@@ -9,6 +9,7 @@ app.use(express.json())
 app.options('*', cors());
 
 const PORT = 8080;
+require('dotenv').config();
 
 app.listen(PORT, function() {
     console.log(`Listening on ${PORT}`);
