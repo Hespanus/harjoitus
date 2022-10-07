@@ -8,7 +8,7 @@ app.use(cors())
 app.use(express.json())
 app.options('*', cors());
 
-const PORT = 8080;
+const PORT = 8080; //testi
 
 
 app.listen(PORT, function() {
